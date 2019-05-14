@@ -8,8 +8,11 @@ export default new Router({
     mode: 'history',
     routes: [
         {
+            path: '/',
+            component: Todos
+        },
+        {
             path: '/:tid',
-            name: 'todo',
             component: Todos
         }
     ]

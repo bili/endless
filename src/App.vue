@@ -5,7 +5,7 @@
         <img src="./assets/avatar.png" alt="bilipan">
       </router-link>
     </div>
-    <Todos/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -16,12 +16,16 @@ export default {
   name: "app",
   components: {
     Todos
+  },
+  mounted() {
+    // this.$store.dispatch("loadTestData");
   }
 };
 </script>
 
 <style>
-html, body {
+html,
+body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,7 +41,8 @@ html, body {
   margin: 0 auto;
   padding: 0.2rem;
 }
-.avatar a, .avatar img {
+.avatar a,
+.avatar img {
   display: inline-block;
   width: 100%;
 }

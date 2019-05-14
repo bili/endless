@@ -1,21 +1,22 @@
 <template>
   <div>
     <div class="input-wrapper">
-      <input placeholder="+ 写一条接下来我想做的事" type="text" autofocus @keyup.enter="add">
+      <input placeholder="+ 写一条接下来想做的事" type="text" autofocus @keyup.enter="add">
     </div>
     <div>
-      <router-link :to="'/'+list.cur.pid" v-if="list.cur" class="title">
-        <div>{{list.cur.text}}</div>
+      <router-link name="todos" :to="'/'+cur.pid" v-if="cur" class="title">
+        <div>{{cur.text}}</div>
       </router-link>
       <div class="title" v-else>Home</div>
     </div>
     <div>
-      <Todo v-for="(item, index) in list.subs" :key="index" :todo="item"/>
+      <Todo v-for="(item, index) in subs" :key="index" :todo="item"/>
     </div>
   </div>
 </template>
 
 <script>
+import localForage from "localforage";
 import Todo from "./Todo.vue";
 export default {
   name: "Todos",
@@ -25,42 +26,69 @@ export default {
   },
   data() {
     return {
-      todos: this.$store.state.todos
+      cur: null,
+      todos: [],
+      subs: []
     };
   },
-  computed: {
-    list() {
-      const _this = this;
-      let obj = {
-        cur: null,
-        subs: []
-      };
-      this.todos.forEach(todo => {
-        if (
-          todo.id ==
-          (typeof _this.$route.params.tid !== "undefined"
-            ? _this.$route.params.tid
-            : "")
-        ) {
-          obj.cur = todo;
-        }
-        if (
-          todo.pid ==
-          (typeof _this.$route.params.tid !== "undefined"
-            ? _this.$route.params.tid
-            : "")
-        ) {
-          obj.subs.push(todo);
-        }
-      });
-      return obj;
+  mounted() {
+    const _this = this;
+    if (this.$store.state.todos.length === 0) {
+      localForage
+        .getItem("todos")
+        .then(function(todos) {
+          _this.todos = todos;
+          // _this.dispatch({
+          //   type: 'setTodos',
+          //   todos: todos
+          // })
+          _this.updateTodos();
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    } else {
+      this.todos = this.$store.state.todos;
     }
   },
-  mounted() {},
+  watch: {
+    todos() {
+      this.updateTodos(this.$route.params.tid)
+    }
+  },
   methods: {
     add(e) {
       console.log(e.target.value);
+    },
+    updateTodos(tid) {
+      tid = tid || "";
+      const _this = this;
+      let cur = null
+      let todos = [];
+      _this.todos.forEach(todo => {
+        if (todo.id == (typeof tid !== "undefined" ? tid : "")) {
+          cur = todo;
+        }
+        if (todo.pid == (typeof tid !== "undefined" ? tid : "")) {
+          todos.push(todo);
+        }
+      });
+      _this.cur = cur;
+      _this.subs = todos;
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.updateTodos(to.params.tid);
+    next();
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to && to.params && to.params.tid && to.params.tid !== "") {
+        vm.updateTodos(to.params.tid);
+      } else {
+        vm.updateTodos();
+      }
+    });
   }
 };
 </script>
