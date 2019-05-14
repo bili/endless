@@ -2,7 +2,7 @@
   <div id="app">
     <div class="avatar">
       <router-link to="/">
-        <img src="./assets/avatar.png" alt="bilipan">
+        <img class="avatar" src="./assets/avatar.png" alt="bilipan">
       </router-link>
     </div>
     <Todos/>
@@ -21,12 +21,19 @@ export default {
 </script>
 
 <style>
-#app {
+html, body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 100px;
+  margin: 0;
+  padding: 0;
+}
+#app {
+  font-size: 0.2rem;
+}
+.avatar {
+  width: 0.5rem;
+  margin: 0 auto;
 }
 </style>
