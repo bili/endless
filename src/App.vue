@@ -1,24 +1,28 @@
 <template>
   <div id="app">
-    <div class="avatar"><img src="./assets/avatar.png" alt="bilipan"></div>
+    <div class="avatar">
+      <router-link to="/">
+        <img src="./assets/avatar.png" alt="bilipan">
+      </router-link>
+    </div>
     <Todos/>
   </div>
 </template>
 
 <script>
-import Todos from './components/Todos.vue'
+import Todos from "./components/Todos.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Todos
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
