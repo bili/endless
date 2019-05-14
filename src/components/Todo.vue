@@ -22,7 +22,7 @@ export default {
   text-decoration: none;
   font-size: 0.2rem;
   width: 100%;
-  padding: 0 0.1rem;
+  padding: 0.05rem 0.1rem;
 }
 .todo:hover {
   background: lightgoldenrodyellow;

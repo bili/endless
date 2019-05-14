@@ -2,7 +2,7 @@
   <div id="app">
     <div class="avatar">
       <router-link to="/">
-        <img class="avatar" src="./assets/avatar.png" alt="bilipan">
+        <img src="./assets/avatar.png" alt="bilipan">
       </router-link>
     </div>
     <Todos/>
@@ -33,7 +33,12 @@ html, body {
   font-size: 0.2rem;
 }
 .avatar {
-  width: 0.5rem;
+  width: 1rem;
   margin: 0 auto;
+  padding: 0.2rem;
+}
+.avatar a, .avatar img {
+  display: inline-block;
+  width: 100%;
 }
 </style>
