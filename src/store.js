@@ -16,14 +16,25 @@ export default new Vuex.Store({
   mutations: {
     setTodos(state, payload) {
       state.todos = payload.todos
+    },
+    addTodo(state, payload) {
+      state.todos.push(payload.todo)
     }
   },
   actions: {
-    setTodos({commit}, todos) {
-      commit({
-        type: 'setTodos',
-        todos: todos
+    setTodos({ commit }, payload) {
+      commit('setTodos', {
+        todos: payload.todos
       })
+    },
+    addTodo({ commit, state }, payload) {
+      commit('addTodo', {
+        todo: payload.todo
+      })
+      localForage.setItem('todos', state.todos).then(value => {
+      }).catch(function (err) {
+        console.log(err);
+      });
     },
     loadTestData({ commit, state }) {
       let todos = [
@@ -92,7 +103,9 @@ export default new Vuex.Store({
       ]
       localForage.setItem('todos', todos).then(value => {
         console.log('loadTestData');
-        state.todos = todos
+        commit('setTodos', {
+          todos: todos
+        })
       }).catch(function (err) {
         console.log(err);
       });

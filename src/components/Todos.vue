@@ -18,6 +18,7 @@
 <script>
 import localForage from "localforage";
 import Todo from "./Todo.vue";
+import { GUID, formatDate } from "../utils.js";
 export default {
   name: "Todos",
   props: {},
@@ -38,10 +39,9 @@ export default {
         .getItem("todos")
         .then(function(todos) {
           _this.todos = todos;
-          // _this.dispatch({
-          //   type: 'setTodos',
-          //   todos: todos
-          // })
+          _this.$store.dispatch("setTodos", {
+            todos: todos
+          });
           _this.updateTodos();
         })
         .catch(function(err) {
@@ -53,17 +53,28 @@ export default {
   },
   watch: {
     todos() {
-      this.updateTodos(this.$route.params.tid)
+      this.updateTodos(this.$route.params.tid);
     }
   },
   methods: {
     add(e) {
-      console.log(e.target.value);
+      let todo = {
+        pid: this.$route.params.tid ? this.$route.params.tid : "",
+        id: GUID(),
+        text: e.target.value,
+        date: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
+        color: "#00c2d1",
+        done: false,
+        isCollapsed: true
+      };
+      this.$store.dispatch("addTodo", {
+        todo: todo
+      });
     },
     updateTodos(tid) {
       tid = tid || "";
       const _this = this;
-      let cur = null
+      let cur = null;
       let todos = [];
       _this.todos.forEach(todo => {
         if (todo.id == (typeof tid !== "undefined" ? tid : "")) {
