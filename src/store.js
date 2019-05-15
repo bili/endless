@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import localForage from 'localforage'
+import TreeModel from 'tree-model'
 
 Vue.use(Vuex)
 
@@ -9,16 +10,20 @@ localForage.config({
   name: 'endless',
 });
 
+let tree = new TreeModel()
+let root = tree.parse({
+  id: '',
+})
 export default new Vuex.Store({
   state: {
-    todos: [],
+    todos: root
   },
   mutations: {
     setTodos(state, payload) {
       state.todos = payload.todos
     },
     addTodo(state, payload) {
-      state.todos.push(payload.todo)
+      state.todos.addChild(payload.todo)
     }
   },
   actions: {

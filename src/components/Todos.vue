@@ -34,7 +34,8 @@ export default {
   },
   mounted() {
     const _this = this;
-    if (this.$store.state.todos.length === 0) {
+    console.log(!this.$store.state.todos);
+    if (!this.$store.state.todos || this.$store.state.todos.length === 0) {
       localForage
         .getItem("todos")
         .then(function(todos) {
@@ -59,12 +60,13 @@ export default {
   methods: {
     add(e) {
       if (e.target.value.trim() == "") return;
+      let tid = this.$route.params.tid ? this.$route.params.tid : "";
       let todo = {
-        pid: this.$route.params.tid ? this.$route.params.tid : "",
+        pid: tid,
         id: GUID(),
         text: e.target.value,
         date: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
-        done: false,
+        done: false
       };
       this.$store.dispatch("addTodo", {
         todo: todo
@@ -72,12 +74,11 @@ export default {
       e.target.value = "";
     },
     updateTodos(tid) {
-      console.log(tid);
       tid = tid || "";
       const _this = this;
       let cur = null;
       let todos = [];
-      console.log(_this.todos.length);
+      if (!_this.todos || _this.todos.length == 0) return;
       _this.todos.forEach(todo => {
         if (todo.id == (typeof tid !== "undefined" ? tid : "")) {
           cur = todo;
