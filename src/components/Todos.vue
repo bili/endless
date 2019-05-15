@@ -9,7 +9,7 @@
       </router-link>
       <div class="title" v-else>Home</div>
     </div>
-    <div>
+    <div class="todos">
       <Todo v-for="(item, index) in subs" :key="index" :todo="item"/>
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       cur: null,
-      todos: [],
+      todos: this.$store.state.todos,
       subs: []
     };
   },
@@ -58,24 +58,26 @@ export default {
   },
   methods: {
     add(e) {
+      if (e.target.value.trim() == "") return;
       let todo = {
         pid: this.$route.params.tid ? this.$route.params.tid : "",
         id: GUID(),
         text: e.target.value,
         date: formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
-        color: "#00c2d1",
         done: false,
-        isCollapsed: true
       };
       this.$store.dispatch("addTodo", {
         todo: todo
       });
+      e.target.value = "";
     },
     updateTodos(tid) {
+      console.log(tid);
       tid = tid || "";
       const _this = this;
       let cur = null;
       let todos = [];
+      console.log(_this.todos.length);
       _this.todos.forEach(todo => {
         if (todo.id == (typeof tid !== "undefined" ? tid : "")) {
           cur = todo;
@@ -132,5 +134,7 @@ input {
   border: 0.03rem solid lightgrey;
   letter-spacing: 0.01rem;
   background: white;
+}
+.todos {
 }
 </style>

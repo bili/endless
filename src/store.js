@@ -23,9 +23,13 @@ export default new Vuex.Store({
   },
   actions: {
     setTodos({ commit }, payload) {
-      commit('setTodos', {
-        todos: payload.todos
-      })
+      localForage.setItem('todos', payload.todos).then(value => {
+        commit('setTodos', {
+          todos: payload.todos
+        })
+      }).catch(function (err) {
+        console.log(err);
+      });
     },
     addTodo({ commit, state }, payload) {
       commit('addTodo', {
